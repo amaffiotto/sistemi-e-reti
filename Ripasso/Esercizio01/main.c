@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(){
     FILE *fp; 
@@ -60,12 +61,43 @@ int main(){
     printf("\n\n");
 
     // Controllo file Elenco.txt
-    fp = fopen("Elenco.txt", "w");
+    char materia[30];
+
+    fp = fopen("Elenco.txt", "r");
     if (fp == NULL)
     {
         fclose(fp);
+        fp = fopen("Elenco.txt", "w");
     }
-    
+    fclose(fp);
 
+    // Visualizzo eventuali materie
+    printf("ELENCO MATERIE\n");
+    fp = fopen("Elenco.txt", "r");
+    while(!feof(fp)){
+        fscanf(fp, "%s", materia);
+        printf("- %s\n", materia);
+    }
+    fclose(fp);
+
+    // Append
+
+    fp = fopen("Elenco.txt", "a");
+    
+    do
+    {
+        printf("Inserisci una materia [FINE per concludere]\n");
+        fflush(stdin);
+        gets(materia);
+        if(strcmp(materia, "FINE") != 0)
+        {
+            fputs(materia, fp);
+            fputs("\n", fp);
+        }
+    } while (strcmp(materia, "FINE") != 0);
+    fclose(fp);
+    
+    
+    printf("\n\n");
     return 0;
 }
