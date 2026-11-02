@@ -1,119 +1,122 @@
-#ifndef FUNZIONI_H
-#define FUNZIONI_H
+/*
+|===================================================================================================|
+|                                       		                                            |
+|                              	     Libreria FUNZIONI                                              |
+|                               	                                                            |
+|                              		    Ver. 1.3                                                |
+|                                                          		                            |
+|                                 Ult.Agg. 19 Marzo 2012                	                    |
+|                                                                               	            |
+|  Elenco funzioni:                                                                     	    |
+|                                                                                           	    |			
+|  - clrscr():             	pulisce lo schermo di lavoro;                                       |
+|  - gotoxy(x,y):          	posiziona il cursore in una specifica posizione sullo schermo;      |
+|  - randomize():          	inizializza la casualità;                                           |
+|  - random(numero):       	genera un numero casuale commpreso tra 0 e il numero inserito;      |
+|  - textcolor(Colore):    	modifica colore del testo;                                          |
+|  - dalay(MilliSecondi):  	crea un attesa in secondi;                                          |
+|  - textbackground(Colore):	imposta il colore dello sfondo; 				    |
+|  - bubble(int*,int);     ordina il vettore con il metodo Bubble Sort                              |
+|                                                                                         	    |
+|===================================================================================================|
+*/
 
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
+#include <windows.h>
 
-static inline void clrscr(void)
+
+void clrscr()
+    {
+     system("cls");
+    }
+
+
+int gotoxy(short X, short Y)
+    {
+	 HANDLE hStdout;
+	 CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
+	 hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	 if (! GetConsoleScreenBufferInfo(hStdout, &csbiInfo))
+	    {
+		 MessageBox(NULL, "GetConsoleScreenBufferInfo", "Console Error", MB_OK);
+		 return 1;
+	    }
+	 csbiInfo.dwCursorPosition.X = X;
+	 csbiInfo.dwCursorPosition.Y = Y;
+	 if (! SetConsoleCursorPosition(hStdout, csbiInfo.dwCursorPosition))
+	    {
+		 MessageBox(NULL, "SetConsoleCursorPosition", "Console Error", MB_OK);
+		 return 1;
+        }
+     return 0;
+    }
+
+
+void randomize()
+    {
+     srand(time(NULL));
+    }
+
+
+int random(int NumMax)
 {
-    printf("\033[2J\033[H");
-    fflush(stdout);
+    int NumGenerato;
+
+    NumGenerato = rand() % NumMax;
+    return NumGenerato;
 }
 
-static inline int gotoxy(short X, short Y)
-{
-    if (X < 0 || Y < 0)
-        return 1;
 
-    printf("\033[%d;%dH", Y + 1, X + 1);
-    fflush(stdout);
+void textcolor(unsigned short color)
+    {
+     HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+     SetConsoleTextAttribute(hCon,color);
+    }
 
-    return 0;
-}
 
-static inline void randomize(void)
-{
-    srand((unsigned int)time(NULL));
-}
+void delay( int MilliSecondi)
+    {
+     double Secondi = 0;
+     if (MilliSecondi > 0)
+        Secondi = MilliSecondi / 1000.0;
+     clock_t endwait;
+     endwait = clock () + Secondi * CLOCKS_PER_SEC;
+     while (clock() < endwait)
+           {}
+    }
 
-static inline int randomNumber(int NumMax)
-{
-    if (NumMax <= 0)
-        return 0;
 
-    return rand() % NumMax;
-}
+void textbackground(unsigned short color)
+    {
+     WORD wColor = (color & 0x0F) << 4;
+     HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+     SetConsoleTextAttribute(hCon,wColor);
+    }
 
-static inline void textcolor(unsigned short color)
-{
-    static const int coloriAnsi[8] = {
-        30, 34, 32, 36, 31, 35, 33, 37
-    };
-
-    int codice = coloriAnsi[color & 7];
-
-    if (color & 8)
-        codice += 60;
-
-    printf("\033[%dm", codice);
-    fflush(stdout);
-}
-
-static inline void delay(int MilliSecondi)
-{
-    if (MilliSecondi <= 0)
-        return;
-
-    struct timespec attesa;
-    struct timespec rimanente;
-
-    attesa.tv_sec = MilliSecondi / 1000;
-    attesa.tv_nsec = (MilliSecondi % 1000) * 1000000L;
-
-    while (nanosleep(&attesa, &rimanente) == -1 && errno == EINTR)
-        attesa = rimanente;
-}
-
-static inline void textbackground(unsigned short color)
-{
-    static const int coloriAnsi[8] = {
-        40, 44, 42, 46, 41, 45, 43, 47
-    };
-
-    int codice = coloriAnsi[color & 7];
-
-    if (color & 8)
-        codice += 60;
-
-    printf("\033[%dm", codice);
-    fflush(stdout);
-}
-
-static inline void resetcolor(void)
-{
-    printf("\033[0m");
-    fflush(stdout);
-}
-
-static inline void bubble(int *vect, int lunghezza)
-{
+void bubble(int*vect,int lunghezza)
+  {
     int n;
     int scambio;
     int i;
     int aus;
 
-    n = lunghezza - 1;
+    n = lunghezza-1;
 
     do
-    {
-        scambio = 0;
-
-        for (i = 0; i < n; i++)
-        {
-            if (vect[i] > vect[i + 1])
-            {
+      {
+       scambio = 0;
+       for (i=0;i<n;i++)
+           {
+            if (vect[i]>vect[i+1])
+               {
                 aus = vect[i];
-                vect[i] = vect[i + 1];
-                vect[i + 1] = aus;
+                vect[i] = vect[i+1];
+                vect[i+1] = aus;
                 scambio = 1;
-            }
-        }
+               }
+           }
+       n--;
+      }
+    while(scambio == 1);
 
-        n--;
-    }
-    while (scambio == 1);
-}
-
-#endif
+  }

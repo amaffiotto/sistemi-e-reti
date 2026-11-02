@@ -1,0 +1,30 @@
+
+ ISTRUZIONI FILE:
+ - fopen(nomeFile,tipoApertura) = permette di APRIRE un FILE;
+ - fclose(FP) = permette di CHIUDERE un FILE;
+ - fprintf(FP, "%d/%s/%c", variabile) = permette di SCRIVERE su un FILE;
+ - fscanf(FP, "%d/%s/%c", variabile) = permette di LEGGERE da un FILE;
+ - fputs(variabile, FP) = permette di SCRIVERE una STRINGA su un FILE;
+ - fgets(variabile,lunghezza,FP) = permette di LEGGERE una STRINGA da un FILE;
+ - feof(FP) = permette di sapere quando sono alla FINE di un FILE;
+
+|-----------|----------|------|---------------------------------------|
+| Tipo      | Pos.     | Tipo | NOTE                                  |
+| Accesso   | Apertura |      |                                       |
+|-----------|----------|------|---------------------------------------|
+| Lettura   | Inizio   |  r   | Se il File non esiste, FP => NULL     |
+|-----------|----------|------|---------------------------------------|
+| Lettura + |          |      |                                       |
+| Scrittura | Inizio   |  r+  | Se il File non esiste, FP => NULL     |
+|-----------|----------|------|---------------------------------------|
+| Scrittura | Inizio   |  w   | Se il File non esiste, viene creato;  |
+|           |          |      | se il File esiste, viene sovrascritto |
+|-----------|----------|------|---------------------------------------|
+| Scrittura | Inizio   |  w+  | Se il File non esiste, viene creato;  |
+| + Lettura |          |      | se il File esiste, viene sovrascritto |
+|-----------|----------|------|---------------------------------------|
+| Scrittura | Fine     |  a   | Se il File non esiste, viene creato;  |
+|-----------|----------|------|---------------------------------------|
+| Lettura + | Fine     |  a+  |                                       |
+| Scrittura |          |      | Se il File non esiste, viene creato;  |
+|-----------|----------|------|---------------------------------------|
