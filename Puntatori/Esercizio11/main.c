@@ -22,6 +22,7 @@ int main()
 
     printf("\nEsercizio 11: Parsing di una stringa con le 4 operazioni");
 
+    pStr = (char *)malloc(sizeof(char) * 20);
     //Input della stringa
     printf("\nInserisci una stringa (nnnOnnn) ==> ");
     fflush(stdin);
